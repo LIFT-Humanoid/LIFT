@@ -29,7 +29,7 @@ import dill
 
 from absl import logging
 
-from env.brax_env import actor_step, Evaluator
+from brax_env.brax_env import actor_step, Evaluator
 from utils import env_wrapper as envs
 from utils import gradients
 from utils import replay_buffers

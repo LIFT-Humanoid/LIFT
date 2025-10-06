@@ -169,6 +169,9 @@ _USE_WANDB = flags.DEFINE_boolean(
     False,
     "Use Weights & Biases for logging (ignored in play-only mode)",
 )
+_WANDB_ENTITY = flags.DEFINE_string(
+    "wandb_entity", "xxx", "wandb entity"
+)
 _RENDER = flags.DEFINE_boolean(
     "render",
     False,
@@ -303,7 +306,7 @@ def main(argv):
 
     # Initialize Weights & Biases if required
     if _USE_WANDB.value and not _PLAY_ONLY.value:
-        wandb.init(project="mjxrl", entity="xxx", name=exp_name)
+        wandb.init(project="mjxrl", entity=_WANDB_ENTITY.value, name=exp_name)
         wandb.config.update(env_cfg.to_dict())
         wandb.config.update({"env_name": _ENV_NAME.value})
 

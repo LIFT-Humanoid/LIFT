@@ -62,32 +62,35 @@ Start large-scale SAC pretraining:
 ```bash
 # If EGL is available (recommended on headless GPU servers):
 export MUJOCO_GL=egl
-# Fallback software rendering:
+# else use software rendering:
 export MUJOCO_GL=osmesa
 
+# Metrics are logged to Weights & Biases (W&B).
+# Replace <your_wandb_entity> with your W&B entity (org or username).
+
 # T1LowDimJoystickRoughTerrain
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimJoystickRoughTerrain --use_wandb --domain_randomization --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimJoystickRoughTerrain --use_wandb --wandb_entity your_wandb_entity --domain_randomization --suffix xxx
 
 # T1LowDimJoystickFlatTerrain
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimJoystickFlatTerrain --use_wandb --domain_randomization --seed 10 --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimJoystickFlatTerrain --use_wandb --wandb_entity your_wandb_entity --domain_randomization --suffix xxx
 
 # G1JoystickFlatTerrain
-CUDA_VISIBLE_DEVICES=0 python -u train_in_mujoco_playground.py --env_name=G1JoystickFlatTerrain --use_wandb --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python -u train_in_mujoco_playground.py --env_name=G1JoystickFlatTerrain --use_wandb --wandb_entity your_wandb_entity  --suffix xxx
 
 # G1JoystickRoughTerrain
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=G1JoystickRoughTerrain --use_wandb --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=G1JoystickRoughTerrain --use_wandb --wandb_entity your_wandb_entity  --suffix xxx
 
 # T1JoystickRoughTerrain
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1JoystickRoughTerrain --use_wandb --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1JoystickRoughTerrain --use_wandb --wandb_entity your_wandb_entity  --suffix xxx
 
 # T1JoystickFlatTerrain
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1JoystickFlatTerrain --use_wandb --suffix xxx
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1JoystickFlatTerrain --use_wandb --wandb_entity your_wandb_entity  --suffix xxx
 
 # G1LowDimJoystickFlatTerrain  (prepared for Brax finetune; see notes below)
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=G1LowDimJoystickFlatTerrain --domain_randomization --use_wandb --suffix xxx --num_timesteps 40000000 --num_evals 10 --save_buffer_data
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=G1LowDimJoystickFlatTerrain --domain_randomization --use_wandb --wandb_entity your_wandb_entity  --suffix xxx --num_timesteps 40000000 --num_evals 10 --save_buffer_data
 
 # T1LowDimSimpRewJoystickFlatTerrain  (prepared for Brax finetune; see notes below)
-CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimSimpRewJoystickFlatTerrain --use_wandb --domain_randomization --suffix xxx --save_buffer_data --num_timesteps 40000000 --num_evals 10
+CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimSimpRewJoystickFlatTerrain --domain_randomization --use_wandb --wandb_entity your_wandb_entity  --suffix xxx --num_timesteps 40000000 --num_evals 10 --save_buffer_data
 ````
 
 ### Common flags
@@ -111,7 +114,7 @@ CUDA_VISIBLE_DEVICES=0 python train_in_mujoco_playground.py --env_name=T1LowDimS
 * `--seed`: Random seed for reproducibility.
 * `--suffix`: Suffix appended to the experiment name (helps differentiate runs).
 * `--use_wandb`: Enable Weights & Biases logging (set `WANDB_PROJECT`/`WANDB_ENTITY` beforehand).
-* `--use_tb`: Enable TensorBoard logging (`tensorboard --logdir logs`).
+- `--wandb_entity`: Your W&B **entity** (username or org) that owns the project. Overrides `WANDB_ENTITY`.
 * `--render`: Periodically render evaluation rollouts to MP4 under `logs/.../videos/`
   (use `MUJOCO_GL=osmesa` on headless machines).
 * `--save_buffer_data`: Persist SAC replay data to `logs/.../buffer_data/` for later analysis/finetune.
@@ -174,6 +177,10 @@ python eval_in_brax.py --env t1 --model models/t1_0.pkl --out t1_0.html
 
 # T1 — Brax 40k-step finetune
 python eval_in_brax.py --env t1 --model models/t1_40000.pkl --out t1_40000.html
+
+# Open the HTML in your default browser (Linux)
+xdg-open t1_40000.html
+
 ```
 
 ---
