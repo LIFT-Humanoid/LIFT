@@ -1,3 +1,6 @@
+## Repository moved
+This repository has been transferred to: https://github.com/bigai-ai/LIFT-humanoid
+
 <div align="center">
   <h1 align="center">LIFT: Large-scale Pretraining & Efficient Finetuning for Humanoid Control</h1>
 
